@@ -267,15 +267,51 @@ class ClientesController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
-        $cliente = $this->Clientes->get($id);
-        if ($this->Clientes->delete($cliente)) {
-            $this->Flash->success(__('The cliente has been deleted.'));
-        } else {
-            $this->Flash->error(__('The cliente could not be deleted. Please, try again.'));
-        }
+        try {
 
-        return $this->redirect(['action' => 'index']);
+            $dados_delete = $this->Clientes->findByCodigo($id)->first();
+            if (!$dados_delete) {
+                $dados = ['cliente'=> ['_error' => 'Cliente não encontrado.']];
+                throw new NotFoundException(json_encode($dados));
+            }
+
+            if ($this->Clientes->delete($dados_delete)) {
+                $message = "Cliente excluido com sucesso!";
+            } else {
+                $dados = ['Erro'=> ['_error' => $dados_save->getErrors()]];
+                throw new InternalErrorException(json_encode($dados));
+            }
+
+            $data = [
+                'status' => 200,
+                'data' => [],
+                'message' => $message
+            ];
+            return $this->response
+                        ->withStatus(200)
+                        ->withType('application/json')
+                        ->withStringBody(json_encode($data)); 
+        } catch(NotFoundException $e){//404
+            $dados = [
+                'status' => 404,
+                "data" => null,
+                "message" => json_decode($e->getMessage(), true)
+            ];
+            return $this->response
+                        ->withStatus(404)
+                        ->withType('application/json')
+                        ->withStringBody(json_encode($dados)); 
+        }catch(InternalErrorException $e){//500
+            $dados = [
+                'status' => 500,
+                "data" => null,
+                "message" => json_decode($e->getMessage(), true)
+            ];
+            return $this->response
+                        ->withStatus(500)
+                        ->withType('application/json')
+                        ->withStringBody(json_encode($dados)); 
+        }
     }
 
     private function validaDadosAdd($dados)
