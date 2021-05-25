@@ -44,6 +44,8 @@ class Application extends BaseApplication
      */
     public function bootstrap(): void
     {
+        $this->addPlugin('ApiProdutos');
+
         $this->addPlugin('ApiClientes');
         // Call parent to load bootstrap from files.
         parent::bootstrap();
