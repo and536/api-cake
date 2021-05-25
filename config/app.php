@@ -293,6 +293,11 @@ return [
             'className' => Connection::class,
             'driver' => Mysql::class,
             'persistent' => false,
+            'host' => 'localhost',
+            'username' => 'root',
+            'password' => 'l9x3j7firp',
+            'database' => 'api-cake',
+            'encoding' => 'utf8',
             'timezone' => 'UTC',
 
             /*
@@ -307,7 +312,7 @@ return [
              */
             'flags' => [],
             'cacheMetadata' => true,
-            'log' => false,
+            'log' => true,
 
             /*
              * Set identifier quoting to true if you are using reserved words or

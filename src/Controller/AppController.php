@@ -41,8 +41,18 @@ class AppController extends Controller
     {
         parent::initialize();
 
-        $this->loadComponent('RequestHandler');
+        $this->loadComponent('RequestHandler', [
+            'enableBeforeRedirect' => false,
+        ]);
         $this->loadComponent('Flash');
+        $this->loadComponent('ErrorHandler', [
+            'controller' => $this
+        ]);
+        $this->loadComponent('Paging', [
+            'controller' => $this
+        ]);        
+        $this->loadComponent('String');
+        $this->loadComponent('Array');
 
         /*
          * Enable the following component for recommended CakePHP form protection settings.
