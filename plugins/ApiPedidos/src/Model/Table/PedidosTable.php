@@ -44,6 +44,10 @@ class PedidosTable extends Table
         $this->setPrimaryKey('codigo');
 
         $this->addBehavior('Timestamp');
+
+        $this->belongsTo('ApiClientes.Clientes')
+            ->setForeignKey(false)
+            ->setConditions(['Pedidos.codigo_cliente = Clientes.codigo']);
     }
 
     /**

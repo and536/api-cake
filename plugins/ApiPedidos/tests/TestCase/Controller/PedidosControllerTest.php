@@ -23,6 +23,7 @@ class ClientesControllerTest extends TestCase
      */
     protected $fixtures = [
         'plugin.ApiPedidos.Pedidos',
+        'plugin.ApiClientes.Clientes'
     ];
 
     /**
@@ -172,6 +173,22 @@ class ClientesControllerTest extends TestCase
     public function testDeleteSemCliente(): void
     {
         $this->delete('pedidos/555');
+
+        $this->assertResponseNotEmpty();
+        $this->assertResponseCode(404);
+    }
+
+    public function testEnvioEmail(): void
+    {
+        $this->get('pedidos/1/sendemail');
+        $this->assertResponseSuccess();
+        $this->assertResponseNotEmpty();
+        $this->assertResponseCode(200);
+    }
+
+    public function testEnvioEmailNotFound(): void
+    {
+        $this->get('pedidos/555/sendemail');
 
         $this->assertResponseNotEmpty();
         $this->assertResponseCode(404);

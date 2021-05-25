@@ -10,5 +10,16 @@ Router::plugin(
         $routes->fallbacks(DashedRoute::class);
 
         $routes->resources('Pedidos');
+
+        $routes->connect(
+            '/pedidos/:id/sendemail',
+            [
+                'controller' => 'Pedidos',
+                'action' => 'envioEmail',
+                '_method' => 'GET'
+            ],[
+                'pass' => ['id']
+            ]
+        );
     }
 );
