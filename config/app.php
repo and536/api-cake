@@ -1,12 +1,17 @@
 <?php
 
-use Cake\Cache\Engine\FileEngine;
-use Cake\Database\Connection;
-use Cake\Database\Driver\Mysql;
-use Cake\Error\ExceptionRenderer;
-use Cake\Log\Engine\FileLog;
-use Cake\Mailer\Transport\MailTransport;
-
+    use Cake\Cache\Engine\FileEngine;
+    use Cake\Database\Connection;
+    use Cake\Database\Driver\Mysql;
+    use Cake\Error\ExceptionRenderer;
+    use Cake\Log\Engine\FileLog;
+    use Cake\Mailer\Transport\MailTransport;
+/*
+ * Local configuration file to provide any overrides to your app.php configuration.
+ * Copy and save this file as app_local.php and make changes as required.
+ * Note: It is not recommended to commit files with credentials such as app_local.php
+ * into source code version control.
+ */
 return [
     /*
      * Debug Level:
@@ -17,7 +22,7 @@ return [
      * Development Mode:
      * true: Errors and warnings shown.
      */
-    'debug' => filter_var(env('DEBUG', false), FILTER_VALIDATE_BOOLEAN),
+    'debug' => filter_var(env('DEBUG', true), FILTER_VALIDATE_BOOLEAN),
 
     /*
      * Configure basic information about the application.
@@ -76,7 +81,7 @@ return [
      *   You should treat it as extremely sensitive data.
      */
     'Security' => [
-        'salt' => env('SECURITY_SALT'),
+        'salt' => env('SECURITY_SALT', '257b740fbe43574280a4b32ee630254962110c9a9152145d852bedc95b064a97'),
     ],
 
     /*
@@ -225,19 +230,19 @@ return [
      */
     'EmailTransport' => [
         'default' => [
-            'className' => MailTransport::class,
+            'className' => Smtp::class,
             /*
              * The keys host, port, timeout, username, password, client and tls
              * are used in SMTP transports
              */
-            'host' => 'localhost',
-            'port' => 25,
+            'host' => 'ssl://smtp.gmail.com',
+            'port' => 465,
             'timeout' => 30,
             /*
              * It is recommended to set these options through your environment or app_local.php
              */
-            //'username' => null,
-            //'password' => null,
+            'username' => 'api.test536@gmail.com',
+            'password' => 'b@nc02021',
             'client' => null,
             'tls' => false,
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
@@ -294,8 +299,8 @@ return [
             'driver' => Mysql::class,
             'persistent' => false,
             'host' => 'localhost',
-            'username' => 'root',
-            'password' => 'l9x3j7firp',
+            'username' => '',//digite seu usuario do banco de testes
+            'password' => '',//digite sua senha do banco de teste
             'database' => 'api-cake',
             'encoding' => 'utf8',
             'timezone' => 'UTC',
@@ -341,6 +346,12 @@ return [
             'className' => Connection::class,
             'driver' => Mysql::class,
             'persistent' => false,
+            'host' => 'localhost',
+            'username' => '',//digite seu usuario do banco de testes
+            'password' => '',//digite sua senha do banco de teste
+            'database' => 'api-cake-tests',
+            'encoding' => 'utf8',
+            'timezone' => 'UTC',
             'timezone' => 'UTC',
             //'encoding' => 'utf8mb4',
             'flags' => [],
