@@ -193,4 +193,20 @@ class ClientesControllerTest extends TestCase
         $this->assertResponseNotEmpty();
         $this->assertResponseCode(404);
     }
+
+    public function testReport(): void
+    {
+        $this->get('pedidos/1/report');
+        $this->assertResponseSuccess();
+        $this->assertResponseNotEmpty();
+        $this->assertResponseCode(200);
+    }
+
+    public function testReportNotFound(): void
+    {
+        $this->get('pedidos/555/report');
+
+        $this->assertResponseNotEmpty();
+        $this->assertResponseCode(404);
+    }
 }

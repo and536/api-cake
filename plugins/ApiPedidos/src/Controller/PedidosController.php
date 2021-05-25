@@ -9,6 +9,8 @@ use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\Exception;
 use Cake\Mailer\Mailer;
+use Cake\Core\Configure;
+use dompdf\Dompdf;
 
 /**
  * Pedidos Controller
@@ -333,6 +335,11 @@ class PedidosController extends AppController
                                 "<span><b>CPF : </b> {$pedido->cliente->cpf}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".
                                 "<span><b>Sexo : </b> {$pedido->cliente->sexo}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".
                                 "<span><b>Email : </b> {$pedido->cliente->email}</span><br><br>".
+                                "<hr>".
+                                "<span><b>Numero do Pedido : </b> {$pedido->codigo}</span><br>".
+                                "<span><b>Forma de Pagamento : </b> {$pedido->forma_pagamento}</span><br>".
+                                "<span><b>Data do Pedido : </b> ".date("d-m-Y H:i:s", strtotime((string) $pedido->data_pedido))."</span><br>".
+                                "<span><b>Observação : </b> {$pedido->observacao}</span><br><br>".
                                 "<table >
                                     <tr>
                                         <th>Produto</th>
@@ -380,6 +387,115 @@ class PedidosController extends AppController
                         ->withStatus(200)
                         ->withType('application/json')
                         ->withStringBody(json_encode($data)); 
+        } catch(NotFoundException $e){//404
+            $dados = [
+                'status' => 404,
+                "data" => null,
+                "message" => json_decode($e->getMessage(), true)
+            ];
+            return $this->response
+                        ->withStatus(404)
+                        ->withType('application/json')
+                        ->withStringBody(json_encode($dados)); 
+        }catch(InternalErrorException $e){//500
+            $dados = [
+                'status' => 500,
+                "data" => null,
+                "message" => json_decode($e->getMessage(), true)
+            ];
+            return $this->response
+                        ->withStatus(500)
+                        ->withType('application/json')
+                        ->withStringBody(json_encode($dados)); 
+        }
+    }
+
+    public function relatorio($id = null)
+    {
+        try {
+            $pedido = $this->Pedidos->findByCodigo($id)
+                           ->contain(['Clientes'])
+                           ->first();
+            if (!$pedido) {
+                $dados = ['pedido'=> ['_error' => 'Pedido não encontrado.']];
+                throw new NotFoundException(json_encode($dados));
+            }
+            
+            $produtos = json_decode($pedido->produtos);
+
+            $corpo_relatorio = "<!DOCTYPE html>".
+                            "<html lang='en'>".
+                            "<head>".
+                                "<meta charset='UTF-8'>".
+                                "<meta http-equiv='X-UA-Compatible' content='IE=edge'>".
+                                "<meta name='viewport' content='width=device-width, initial-scale=1.0'>".
+                                "<style>
+                                    table {
+                                    font-family: arial, sans-serif;
+                                    border-collapse: collapse;
+                                    width: 100%;
+                                    }
+                                    
+                                    td, th {
+                                    border: 1px solid #dddddd;
+                                    text-align: left;
+                                    padding: 8px;
+                                    }
+                                    
+                                    tr:nth-child(even) {
+                                    background-color: #dddddd;
+                                    }
+                                </style>".
+                            "</head>".
+                            "<body>".
+                                "<h3>Detalhes do Pedido</h3>".
+                                "<span><b>Nome : </b> {$pedido->cliente->nome}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".
+                                "<span><b>CPF : </b> {$pedido->cliente->cpf}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".
+                                "<span><b>Sexo : </b> {$pedido->cliente->sexo}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".
+                                "<span><b>Email : </b> {$pedido->cliente->email}</span><br><br>".
+                                "<hr>".
+                                "<span><b>Numero do Pedido : </b> {$pedido->codigo}</span><br>".
+                                "<span><b>Forma de Pagamento : </b> {$pedido->forma_pagamento}</span><br>".
+                                "<span><b>Data do Pedido : </b> ".date("d-m-Y H:i:s", strtotime((string) $pedido->data_pedido))."</span><br>".
+                                "<span><b>Observação : </b> {$pedido->observacao}</span><br><br>".
+                                "<table >
+                                    <tr>
+                                        <th style='text-align:center'>Produto</th>
+                                        <th style='text-align:center'>Quantidade</th>
+                                        <th style='text-align:center'>Valor Unitario</th>
+                                        <th style='text-align:center'>Valor</th>
+                                    </tr>";
+                                    $valor_total = 0;
+                                    foreach ($produtos as $key => $produto) {
+                                        $valor = $produto->quantidade * $produto->valor;
+                                        $corpo_relatorio .= "<tr>
+                                                            <td style='text-align:center'>{$produto->nome}</td>
+                                                            <td style='text-align:center'>{$produto->quantidade}</td>
+                                                            <td style='text-align:center'>R$ ".number_format($produto->valor, 2, ',', ' ')."</td>
+                                                            <td style='text-align:center'>R$ ".number_format($valor, 2, ',', ' ')."</td>
+                                                        </tr>";
+                                        $valor_total = $valor_total + $valor;
+                                    }
+                                    
+                                    $corpo_relatorio .= "<tr>
+                                        <th colspan='3'>Total</th>
+                                        <th style='text-align:center'>R$ ".number_format($valor_total, 2, ',', ' ')."</th>
+                                    </tr>".
+                                "</table>".
+                            "</body>".
+                            "</html>";
+ 
+            if (!$this->Pedidos->checkTest()) {
+                $mpdf = new \Mpdf\Mpdf();
+                $mpdf->WriteHTML($corpo_relatorio);
+                $mpdf->Output(); 
+                exit;
+            }
+
+            return $this->response
+                        ->withStatus(200)
+                        ->withType('application/json')
+                        ->withStringBody(json_encode([])); 
         } catch(NotFoundException $e){//404
             $dados = [
                 'status' => 404,

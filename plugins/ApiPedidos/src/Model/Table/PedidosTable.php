@@ -44,6 +44,7 @@ class PedidosTable extends Table
         $this->setPrimaryKey('codigo');
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('CheckTest');
 
         $this->belongsTo('ApiClientes.Clientes')
             ->setForeignKey(false)

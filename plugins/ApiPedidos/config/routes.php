@@ -21,5 +21,16 @@ Router::plugin(
                 'pass' => ['id']
             ]
         );
+
+        $routes->connect(
+            '/pedidos/:id/report',
+            [
+                'controller' => 'Pedidos',
+                'action' => 'relatorio',
+                '_method' => 'GET'
+            ],[
+                'pass' => ['id']
+            ]
+        );
     }
 );
