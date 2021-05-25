@@ -1,0 +1,397 @@
+{
+	"info": {
+		"_postman_id": "b022d73a-8bdc-4bf6-a727-7d1415da67fd",
+		"name": "API-Cake",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Clientes",
+			"item": [
+				{
+					"name": "Clientes - Index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8765/clientes",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"clientes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Clientes - View",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8765/clientes/5",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"clientes",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Clientes - Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8765/clientes/4",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"clientes",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Clientes - Edit",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\" : \"André Santos 537\",\n    \"cpf\" : \"344.290.550-84\",\n    \"sexo\" : \"Masculino\",\n    \"email\" : \"andre.santos@outlook.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8765/clientes/5",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"clientes",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Clientes - Add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\" : \"André Santos\",\n    \"cpf\" : \"344.290.550-84\",\n    \"sexo\" : \"Masculino\",\n    \"email\" : \"aluiz536@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8765/clientes",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"clientes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Produtos",
+			"item": [
+				{
+					"name": "Produtos - Index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8765/produtos",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"produtos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Produtos - View",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8765/produtos/3",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"produtos",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Produtos - Add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\" : \"Produto 2\",\n    \"cor\" : \"Vermelho\",\n    \"tamanho\" : \"2\",\n    \"valor\" : 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8765/produtos",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"produtos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Produtos - Edit",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\" : \"Produto 1\",\n    \"cor\" : \"Amarelo\",\n    \"tamanho\" : \"3\",\n    \"valor\" : 2.5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8765/produtos/3",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"produtos",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Produtos - Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8765/produtos/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"produtos",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pedidos",
+			"item": [
+				{
+					"name": "Pedidos - Index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8765/pedidos",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"pedidos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pedidos - View",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8765/pedidos/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"pedidos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pedidos - Add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data_pedido\" : \"2021-05-25 02:38:30\",\n    \"observacao\" : \"Pedido em Analise\",\n    \"forma_pagamento\" : \"cartao\",\n    \"codigo_cliente\" : 5,\n    \"produtos\" : [\n        {\n            \"codigo\":3,\n            \"nome\":\"Produto 1\",\n            \"quantidade\": 3,\n            \"valor\": 1.5\n        },\n        {\n            \"codigo\":4,\n            \"nome\":\"Produto 2\",\n            \"quantidade\": 3,\n            \"valor\": 5\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8765/pedidos",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"pedidos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pedidos - Edit",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data_pedido\" : \"2021-05-25 02:38:30\",\n    \"observacao\" : \"Pedido em Analise\",\n    \"forma_pagamento\" : \"cartao\",\n    \"codigo_cliente\" : 5,\n    \"produtos\" : [\n        {\n            \"codigo\":3,\n            \"nome\":\"Produto 1\",\n            \"quantidade\": 3,\n            \"valor\": 1.5\n        },\n        {\n            \"codigo\":4,\n            \"nome\":\"Produto 2\",\n            \"quantidade\": 3,\n            \"valor\": 5\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8765/pedidos/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"pedidos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pedidos - Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8765/pedidos/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"pedidos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pedidos - Envio de Email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8765/pedidos/2/sendemail",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"pedidos",
+								"2",
+								"sendemail"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pedidos - Relatorio Pedido",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8765/pedidos/2/report",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"pedidos",
+								"2",
+								"report"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
