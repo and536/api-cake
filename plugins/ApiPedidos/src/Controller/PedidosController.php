@@ -8,6 +8,7 @@ use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\Http\Exception;
+use Cake\Mailer\Mailer;
 
 /**
  * Pedidos Controller
@@ -255,6 +256,119 @@ class PedidosController extends AppController
             } else {
                 $dados = ['Erro'=> ['_error' => $dados_save->getErrors()]];
                 throw new InternalErrorException(json_encode($dados));
+            }
+
+            $data = [
+                'status' => 200,
+                'data' => [],
+                'message' => $message
+            ];
+            return $this->response
+                        ->withStatus(200)
+                        ->withType('application/json')
+                        ->withStringBody(json_encode($data)); 
+        } catch(NotFoundException $e){//404
+            $dados = [
+                'status' => 404,
+                "data" => null,
+                "message" => json_decode($e->getMessage(), true)
+            ];
+            return $this->response
+                        ->withStatus(404)
+                        ->withType('application/json')
+                        ->withStringBody(json_encode($dados)); 
+        }catch(InternalErrorException $e){//500
+            $dados = [
+                'status' => 500,
+                "data" => null,
+                "message" => json_decode($e->getMessage(), true)
+            ];
+            return $this->response
+                        ->withStatus(500)
+                        ->withType('application/json')
+                        ->withStringBody(json_encode($dados)); 
+        }
+    }
+
+    public function envioEmail($id = null)
+    {
+        try {
+            $pedido = $this->Pedidos->findByCodigo($id)
+                           ->contain(['Clientes'])
+                           ->first();
+
+            if (!$pedido) {
+                $dados = ['pedido'=> ['_error' => 'Pedido não encontrado.']];
+                throw new NotFoundException(json_encode($dados));
+            }
+            
+            $produtos = json_decode($pedido->produtos);
+
+            $corpo_email = "<!DOCTYPE html>".
+                            "<html lang='en'>".
+                            "<head>".
+                                "<meta charset='UTF-8'>".
+                                "<meta http-equiv='X-UA-Compatible' content='IE=edge'>".
+                                "<meta name='viewport' content='width=device-width, initial-scale=1.0'>".
+                                "<style>
+                                    table {
+                                    font-family: arial, sans-serif;
+                                    border-collapse: collapse;
+                                    width: 100%;
+                                    }
+                                    
+                                    td, th {
+                                    border: 1px solid #dddddd;
+                                    text-align: left;
+                                    padding: 8px;
+                                    }
+                                    
+                                    tr:nth-child(even) {
+                                    background-color: #dddddd;
+                                    }
+                                </style>".
+                            "</head>".
+                            "<body>".
+                                "<span><b>Nome : </b> {$pedido->cliente->nome}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".
+                                "<span><b>CPF : </b> {$pedido->cliente->cpf}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".
+                                "<span><b>Sexo : </b> {$pedido->cliente->sexo}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".
+                                "<span><b>Email : </b> {$pedido->cliente->email}</span><br><br>".
+                                "<table >
+                                    <tr>
+                                        <th>Produto</th>
+                                        <th>Quantidade</th>
+                                        <th>Valor Unitario</th>
+                                        <th>Valor</th>
+                                    </tr>";
+                                    $valor_total = 0;
+                                    foreach ($produtos as $key => $produto) {
+                                        $valor = $produto->quantidade * $produto->valor;
+                                        $corpo_email .= "<tr>
+                                                            <td>{$produto->nome}</td>
+                                                            <td>{$produto->quantidade}</td>
+                                                            <td>R$ ".number_format($produto->valor, 2, ',', ' ')."</td>
+                                                            <td>R$ ".number_format($valor, 2, ',', ' ')."</td>
+                                                        </tr>";
+                                        $valor_total = $valor_total + $valor;
+                                    }
+                                    
+                                    $corpo_email .= "<tfoot>
+                                        <th colspan='3'>Total</th>
+                                        <th>R$ ".number_format($valor_total, 2, ',', ' ')."</th>
+                                    </tfoot>".
+                                "</table>".
+                            "</body>".
+                            "</html>";
+            $email = new Mailer('default');
+            $envio_email = $email->setFrom(['api.test536@gmail.com' => 'Detalhes do pedido'])
+                    ->setEmailFormat('html')
+                    ->setTo($pedido->cliente->email)
+                    ->setSubject('Detalhes do pedido')
+                    ->deliver($corpo_email);
+            if ($envio_email) {
+                $message = "Email enviado com sucesso!";
+            } else {
+                $message = "Erro ao enviar o email!";
             }
 
             $data = [
