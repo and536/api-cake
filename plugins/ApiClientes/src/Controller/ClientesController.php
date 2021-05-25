@@ -33,11 +33,6 @@ class ClientesController extends AppController
         try {
             $clientes = $this->Clientes->find();
 
-            if (!$clientes) {
-                $dados = ['cliente'=> ['_error' => 'Clientes não encontrados.']];
-                throw new NotFoundException(json_encode($dados));
-            }
-
             foreach ($clientes as $key => $cliente) {
                 $retorna_clientes = $this->corrigeCpf($cliente);
             }
@@ -50,17 +45,8 @@ class ClientesController extends AppController
             return $this->response
                         ->withStatus(200)
                         ->withType('application/json')
-                        ->withStringBody(json_encode($data)); 
-        } catch(NotFoundException $e){//404
-            $dados = [
-                'status' => 404,
-                "data" => null,
-                "message" => json_decode($e->getMessage(), true)
-            ];
-            return $this->response
-                        ->withStatus(404)
-                        ->withType('application/json')
-                        ->withStringBody(json_encode($dados)); 
+                        ->withStringBody(json_encode($data));
+        // @codeCoverageIgnoreStart               
         }catch(InternalErrorException $e){//500
             $dados = [
                 'status' => 500,
@@ -72,6 +58,7 @@ class ClientesController extends AppController
                         ->withType('application/json')
                         ->withStringBody(json_encode($dados)); 
         }
+        // @codeCoverageIgnoreEnd
     }
 
     /**

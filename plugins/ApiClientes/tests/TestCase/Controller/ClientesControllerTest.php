@@ -32,7 +32,10 @@ class ClientesControllerTest extends TestCase
      */
     public function testIndex(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->get('clientes');
+
+        $this->assertResponseNotEmpty();
+        $this->assertResponseCode(200);
     }
 
     /**
@@ -42,7 +45,18 @@ class ClientesControllerTest extends TestCase
      */
     public function testView(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->get('clientes/1');
+
+        $this->assertResponseNotEmpty();
+        $this->assertResponseCode(200);
+    }
+
+    public function testViewNotFound(): void
+    {
+        $this->get('clientes/200');
+
+        $this->assertResponseNotEmpty();
+        $this->assertResponseCode(404);
     }
 
     /**
@@ -52,7 +66,62 @@ class ClientesControllerTest extends TestCase
      */
     public function testAdd(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $data = [
+            "nome" => "André Santos",
+            "cpf" => "114.884.286-11",
+            "sexo" => "Masculino",
+            "email" => "aluiz536@gmail.com"
+        ];
+        
+        $this->post('clientes', $data);
+        $this->assertResponseSuccess();
+        $this->assertResponseNotEmpty();
+        $this->assertResponseCode(200);
+    }
+
+    public function testAddCpfIncorreto(): void
+    {
+        $data = [
+            "nome" => "André Santos",
+            "cpf" => "114.884.286-00",
+            "sexo" => "Masculino",
+            "email" => "aluiz536@gmail.com"
+        ];
+        
+        $this->post('clientes', $data);
+
+        $this->assertResponseNotEmpty();
+        $this->assertResponseCode(400);
+    }
+
+    public function testAddEmailIncorreto(): void
+    {
+        $data = [
+            "nome" => "André Santos",
+            "cpf" => "114.884.286-11",
+            "sexo" => "Masculino",
+            "email" => "aluiz536@@gmail.com"
+        ];
+        
+        $this->post('clientes', $data);
+
+        $this->assertResponseNotEmpty();
+        $this->assertResponseCode(400);
+    }
+
+    public function testAddCpfEmailIncorreto(): void
+    {
+        $data = [
+            "nome" => "André Santos",
+            "cpf" => "114.884.286-00",
+            "sexo" => "Masculino",
+            "email" => "aluiz536@@gmail.com"
+        ];
+        
+        $this->post('clientes', $data);
+
+        $this->assertResponseNotEmpty();
+        $this->assertResponseCode(400);
     }
 
     /**
@@ -62,7 +131,77 @@ class ClientesControllerTest extends TestCase
      */
     public function testEdit(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $data = [
+            "nome" => "André Santos",
+            "cpf" => "114.884.286-11",
+            "sexo" => "Masculino",
+            "email" => "aluiz536@gmail.com"
+        ];
+        
+        $this->put('clientes/1', $data);
+        $this->assertResponseSuccess();
+        $this->assertResponseNotEmpty();
+        $this->assertResponseCode(200);
+    }
+
+    public function testEditSemCliente(): void
+    {
+        $data = [
+            "nome" => "André Santos",
+            "cpf" => "114.884.286-11",
+            "sexo" => "Masculino",
+            "email" => "aluiz536@gmail.com"
+        ];
+        
+        $this->put('clientes/555', $data);
+
+        $this->assertResponseNotEmpty();
+        $this->assertResponseCode(404);
+    }
+
+    public function testEditCpfIncorreto(): void
+    {
+        $data = [
+            "nome" => "André Santos",
+            "cpf" => "114.884.286-00",
+            "sexo" => "Masculino",
+            "email" => "aluiz536@gmail.com"
+        ];
+        
+        $this->put('clientes/1', $data);
+
+        $this->assertResponseNotEmpty();
+        $this->assertResponseCode(400);
+    }
+
+    public function testEditEmailIncorreto(): void
+    {
+        $data = [
+            "nome" => "André Santos",
+            "cpf" => "114.884.286-11",
+            "sexo" => "Masculino",
+            "email" => "aluiz536@@gmail.com"
+        ];
+        
+        $this->put('clientes/1', $data);
+
+        $this->assertResponseNotEmpty();
+        $this->assertResponseCode(400);
+    }
+
+    public function testEditCpfEmailIncorreto(): void
+    {
+        $data = [
+            "nome" => "André Santos",
+            "cpf" => "114.884.286-00",
+            "sexo" => "Masculino",
+            "email" => "aluiz536@@gmail.com"
+        ];
+        
+        $this->put('clientes/1', $data);
+
+        $this->assertResponseNotEmpty();
+        $this->assertResponseCode(400);
     }
 
     /**
@@ -72,6 +211,17 @@ class ClientesControllerTest extends TestCase
      */
     public function testDelete(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->delete('clientes/1');
+
+        $this->assertResponseNotEmpty();
+        $this->assertResponseCode(200);
+    }
+
+    public function testDeleteSemCliente(): void
+    {
+        $this->delete('clientes/555');
+
+        $this->assertResponseNotEmpty();
+        $this->assertResponseCode(404);
     }
 }

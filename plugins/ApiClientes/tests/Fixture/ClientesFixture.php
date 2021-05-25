@@ -44,10 +44,10 @@ class ClientesFixture extends TestFixture
         $this->records = [
             [
                 'codigo' => 1,
-                'cpf' => 'Lorem ipsum dolor sit amet',
-                'nome' => 'Lorem ipsum dolor sit amet',
-                'sexo' => 'Lorem ipsum dolor sit amet',
-                'email' => 'Lorem ipsum dolor sit amet',
+                'cpf' => '39809196768',
+                'nome' => 'Benedito Diogo Ian Pinto',
+                'sexo' => 'Masculino',
+                'email' => 'beneditodiogoianpinto-90@ctfmgacc.org.br',
                 'created' => 1621881839,
                 'modified' => 1621881839,
             ],
